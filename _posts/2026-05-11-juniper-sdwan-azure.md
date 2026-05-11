@@ -227,21 +227,33 @@ ________________________________________
 **Key Design Benefits**
 
 The final architecture provided:
+
 •	High availability across Availability Zones
+
 •	Elimination of Azure Load Balancer dependency
+
 •	Dynamic route exchange using BGP
+
 •	Centralized Azure Firewall inspection
+
 •	Symmetric routing across hybrid environments
+
 •	Seamless integration with ExpressRoute and VPN gateways
+
 •	Controlled and scalable Hub-Spoke routing
 ________________________________________
 **Lessons Learned**
 
 Several important considerations emerged during implementation:
+
 •	Azure Load Balancer is not always suitable for overlay-based SD-WAN appliances
+
 •	Symmetric routing becomes critical when integrating Azure Firewall with SD-WAN
+
 •	Azure Route Server significantly simplifies hybrid route propagation
+
 •	Combining dynamic routing with selective static UDRs offers greater operational flexibility
+
 •	Route scale limitations must be considered early in design phases
 ________________________________________
 **Conclusion**
@@ -249,9 +261,13 @@ ________________________________________
 While Azure Virtual WAN simplifies many SD-WAN deployments, traditional self-managed Hub-Spoke architectures continue to play an important role in enterprise environments requiring deeper routing control, advanced security inspection, and customized traffic engineering.
 
 By combining:
+
 •	Juniper SD-WAN
+
 •	Azure Route Server
+
 •	Azure Firewall
+
 •	ExpressRoute/VPN integration
 
 it is possible to design a scalable, highly available, and operationally controlled SD-WAN architecture in Azure while overcoming common routing and failover challenges.
