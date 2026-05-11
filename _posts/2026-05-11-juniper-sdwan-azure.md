@@ -16,9 +16,13 @@ However, some enterprise environments require a more traditional self-managed Hu
 This article explores a real-world Azure networking design for deploying Juniper SD-WAN in a traditional Hub-Spoke architecture while maintaining:
 
 •	Full routing control
+
 •	Centralized Azure Firewall inspection
+
 •	High availability across Availability Zones
+
 •	Hybrid datacenter connectivity through ExpressRoute and VPN gateways
+
 •	Symmetric routing across SD-WAN and Azure workloads
 
 The design also addresses several Azure and SD-WAN integration constraints commonly encountered in enterprise environments.
@@ -33,8 +37,9 @@ The solution required a highly available SD-WAN deployment capable of tolerating
 •	Availability Zone failures
 •	Network appliance failover scenarios
 The objective was to increase resiliency of the SD-WAN hubs while ensuring uninterrupted branch connectivity.
-________________________________________
+
 Constraint 1 — Azure Load Balancer Probe Limitation
+
 A key challenge involved Juniper SD-WAN NVAs not responding to Azure Load Balancer health probes.
 This behavior is expected because Juniper SD-WAN overlay communication is authenticated and secured by design. The appliances do not expose generic probe listeners required by Azure Standard Load Balancer health checks.
 As a result:
@@ -49,8 +54,9 @@ Another key requirement was ensuring that all traffic traversing between:
 •	SD-WAN branches
 must be inspected through Azure Firewall.
 This introduced additional routing complexity because traffic needed to remain symmetric while still traversing centralized security inspection points.
-________________________________________
+
 Constraint 2 — Asymmetric Routing Challenges
+
 Asymmetric routing is a common issue in SD-WAN and firewall-integrated architectures.
 Challenges included:
 •	Return traffic bypassing Azure Firewall
@@ -66,8 +72,9 @@ The environment also included existing datacenter connectivity through:
 •	ExpressRoute Gateways
 •	VPN Gateways
 Traffic between datacenters and SD-WAN-connected branches also required mandatory Azure Firewall inspection.
-________________________________________
+
 Constraint 3 — Symmetric Routing across ExpressRoute and VPN
+
 Traffic entering Azure from datacenters through ExpressRoute or VPN gateways needed to:
 •	traverse Azure Firewall
 •	maintain symmetric return paths
@@ -77,7 +84,7 @@ ________________________________________
 
 **Solution Design**
 
-**High Availability Architecture for SD-WAN Hubs**
+**1.High Availability Architecture for SD-WAN Hubs**
 
 To address the Azure Load Balancer limitation, the design deployed:
 •	Two Juniper SD-WAN NVAs per hub
@@ -91,7 +98,7 @@ Failover between SD-WAN hubs was handled natively through the SD-WAN overlay usi
 •	Overlay route preference
 This eliminated dependency on Azure Load Balancer for inbound SD-WAN connectivity.
 ________________________________________
-**Azure Route Server Integration**
+**2.Azure Route Server Integration**
 
 Azure Route Server (ARS) was introduced to enable dynamic route exchange between:
 •	Juniper SD-WAN hubs
@@ -101,14 +108,14 @@ Azure Route Server (ARS) was introduced to enable dynamic route exchange between
 BGP peering was established between Azure Route Server and the SD-WAN hubs.
 This allowed dynamically learned SD-WAN prefixes to propagate automatically across the Azure network fabric.
 ________________________________________
-**Routing Design**
+**3.Routing Design**
 
 The architecture used a hybrid routing model combining:
 •	Dynamic route propagation using Azure Route Server
 •	Static route enforcement using User Defined Routes (UDRs)
 This semi-dynamic design provided greater routing control while maintaining scalability.
-________________________________________
-**Routing Azure Firewall to SD-WAN (Dynamic via Route Server)**
+
+**3.1.Routing Azure Firewall to SD-WAN (Dynamic via Route Server)**
 
 Specific branch prefixes needed to be routed from Azure Firewall toward dedicated SD-WAN hubs.
 The SD-WAN appliances advertised branch routes through BGP to Azure Route Server.
@@ -117,8 +124,8 @@ Benefits included:
 •	Dynamic route learning
 •	Reduced administrative overhead
 •	Simplified SD-WAN branch onboarding
-________________________________________
-**Routing SD-WAN to Azure Firewall (Static via UDRs)**
+
+**3.2.Routing SD-WAN to Azure Firewall (Static via UDRs)**
 
 Traffic originating from the SD-WAN private subnet toward:
 •	Azure spoke VNets
@@ -127,15 +134,15 @@ was statically routed toward Azure Firewall using User Defined Routes.
 This ensured all east-west and north-south traffic remained inspected.
 One design limitation encountered was Azure’s UDR limit of 400 routes per route table.
 Proper route summarization and segmentation became important scalability considerations.
-________________________________________
-**Spoke to Firewall Routing**
+
+**3.3.Spoke to Firewall Routing**
 
 Spoke VNets used UDRs configured with:
 •	Azure Firewall as next hop
 •	Gateway propagation disabled
 This ensured spoke traffic could not bypass centralized firewall inspection.
-________________________________________
-**Route Redistribution to ExpressRoute and VPN Gateways**
+
+**3.4.Route Redistribution to ExpressRoute and VPN Gateways**
 
 Many hybrid environments continue using ExpressRoute and VPN connectivity while gradually migrating branches toward SD-WAN.
 To support this coexistence model, Azure Route Server branch-to-branch capability was enabled.
@@ -146,8 +153,8 @@ As a result:
 •	Datacenters gained visibility of SD-WAN-connected branches
 •	Existing hybrid routing models remained operational
 •	Migration complexity was reduced
-________________________________________
-**Route Advertisement toward SD-WAN**
+
+**3.5.Route Advertisement toward SD-WAN**
 
 The SD-WAN hubs dynamically learned:
 •	Azure VNET prefixes
@@ -183,10 +190,12 @@ ________________________________________
 **Conclusion**
 
 While Azure Virtual WAN simplifies many SD-WAN deployments, traditional self-managed Hub-Spoke architectures continue to play an important role in enterprise environments requiring deeper routing control, advanced security inspection, and customized traffic engineering.
+
 By combining:
 •	Juniper SD-WAN
 •	Azure Route Server
 •	Azure Firewall
 •	ExpressRoute/VPN integration
+
 it is possible to design a scalable, highly available, and operationally controlled SD-WAN architecture in Azure while overcoming common routing and failover challenges.
 
