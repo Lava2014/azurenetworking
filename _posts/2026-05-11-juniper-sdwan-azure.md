@@ -5,8 +5,6 @@ Categories: [Azure, Networking, SD-WAN]
 Tags: [Azure, SDWAN, Juniper, HubSpoke, AzureFirewall, ExpressRoute]
 ---
 
-![Architecture Diagram](azurenetworking/assets/sdwan3.png)
-
 # Designing Juniper SD-WAN Integration in Azure using a Traditional Hub-Spoke Architecture
 
 **Introduction**
@@ -146,6 +144,8 @@ BGP peering was established between Azure Route Server and the SD-WAN hubs.
 This allowed dynamically learned SD-WAN prefixes to propagate automatically across the Azure network fabric.
 ________________________________________
 **3.Routing Design**
+
+![Architecture Diagram](/assets/sdwan3.png)
 
 The architecture used a hybrid routing model combining:
 
