@@ -5,7 +5,7 @@ Categories: [Azure, Networking, SD-WAN]
 Tags: [Azure, SDWAN, Juniper, HubSpoke, AzureFirewall, ExpressRoute]
 ---
 
-![Architecture Diagram](/assets/sdwan3.png)
+![Architecture Diagram](azurenetworking/assets/sdwan3.png)
 
 # Designing Juniper SD-WAN Integration in Azure using a Traditional Hub-Spoke Architecture
 
