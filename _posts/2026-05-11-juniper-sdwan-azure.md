@@ -13,7 +13,7 @@ There are multiple networking patterns available for integrating SD-WAN with Mic
 
 However, some enterprise environments require a more traditional self-managed Hub-Spoke architecture to retain full control over routing decisions, firewall inspection, traffic engineering, and hybrid connectivity.
 
-This article explores a real-world Azure networking design for deploying Juniper SD-WAN in a traditional Hub-Spoke architecture while maintaining:
+This article explores a real-world Azure networking design for deploying Juniper SD-WAN(mist managed ssrs) in a traditional Hub-Spoke architecture while maintaining:
 
 •	Full routing control
 
