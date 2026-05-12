@@ -145,7 +145,7 @@ This allowed dynamically learned SD-WAN prefixes to propagate automatically acro
 ________________________________________
 **3.Routing Design**
 
-![Architecture Diagram](/assets/sdwan3.png)
+![Architecture Diagram](/assets/SDWAN3.png)
 
 The architecture used a hybrid routing model combining:
 
